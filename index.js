@@ -17,6 +17,7 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
 	console.log('Ready!');
+	client.user.setActivity("WynnCraft API", {type: 'PLAYING'})
 });
 
 client.on('interactionCreate', async interaction => {

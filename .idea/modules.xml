@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wynncord.iml" filepath="$PROJECT_DIR$/.idea/wynncord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WynnCord.iml" filepath="$PROJECT_DIR$/.idea/WynnCord.iml" />
     </modules>
   </component>
 </project>

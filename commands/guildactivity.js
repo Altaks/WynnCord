@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
 module.exports = {
@@ -12,47 +11,31 @@ module.exports = {
 		)
 		.setDescription('Displays a guild activity'),
 	async execute(interaction) {
-		if(interaction.replied) return;
-		await interaction.deferReply()
 
-		let url = `https://api.wynncraft.com/public_api.php?action=guildList`;
+		let searchedGuild = interaction.options.getString("guild");
 
+		let url = `https://api.wynncraft.com/public_api.php?action=guildStats&command=${searchedGuild}`;
 		let settings = { method: "GET" };
 
-		fetch(url, settings)
-			.then(res => res.json())
-			.then((json) => {
-				if(!json.guilds.contains(interaction.options.getString("guild"))){
-					interaction.reply("Guild not found");
-					return;
-				}
-			});
+		let messages = [];
 
-		// check if the guild exists
-		if(interaction.replied) return;
-		url = `https://api.wynncraft.com/public_api.php?action=guildStats&command=${interaction.options.getString("guild")}`;
-
-		fetch(url, settings)
+		await fetch(url, settings)
 			.then(res => res.json())
-			.then((guildData) => {
-				const embed = new MessageEmbed()
-					.setColor('#8d63d4')
-					.setTitle('Guild Activity from ' + guildData.name)
-					.setDescription("Prefix: " + guildData.prefix)
-					.setFooter({text: "Developed by Altaks", iconURL: "https://login.vivaldi.net/profile/avatar/Altair61000/T4N7hL46wPy9DH3U.jpeg"})
-				const playerConnections = [];
-				guildData.members.forEach(member => {
-					fetch("https://api.wynncraft.com/player/${member.uuid}/stats")
-						.then(response => response.json())
-						.then(results => playerConnections.push({"playerName": member.name, "lastjoin": results.meta.lastJoin})
-					)
-				})
-				playerConnections.sort((a,b) => b.lastjoin.getTime() - a.lastjoin.getTime())
-				for(let player in playerConnections){
-					embed.addField(player["playerName"], player["lastjoin"], true)
+			.then(guildData => {
+				let msg = ""
+				for(let member in guildData.members){
+					let temp = guildData.members[member].name + " " + guildData.members[member].rank
+					if(msg.length + temp.length >= 2000) {
+						messages.push(msg);
+						msg = "";
+					}
+					msg += temp;
 				}
-				embed.setTimestamp()
-				interaction.reply(embed);
-			});
+				messages.push(msg)
+			}
+		);
+		console.log(messages)
+		await interaction.reply({ content: messages[0], ephemeral: false });
+		if(messages.length > 1) for(let i = 1; i < messages.length; i++) await interaction.channel.send({ content: messages[i], ephemeral: false });
 	},
 };
