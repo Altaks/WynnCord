@@ -17,6 +17,7 @@ module.exports = {
 		let url = `https://api.wynncraft.com/public_api.php?action=guildStats&command=${searchedGuild}`;
 		let settings = { method: "GET" };
 
+		// build response msg
 		let messages = [];
 
 		await fetch(url, settings)
@@ -24,7 +25,17 @@ module.exports = {
 			.then(guildData => {
 				let msg = ""
 				for(let member in guildData.members){
+
+					// query player information
+
+
+
 					let temp = guildData.members[member].name + " " + guildData.members[member].rank
+
+
+
+
+
 					if(msg.length + temp.length >= 2000) {
 						messages.push(msg);
 						msg = "";
