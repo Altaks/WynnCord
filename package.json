@@ -1,0 +1,13 @@
+{
+  "name": "WynnCord",
+  "version": "1.0.0",
+  "description": "Wynncraft Discord Bot that uses WynnCraft public API",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Altaks",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.7.0"
+  }
+}
