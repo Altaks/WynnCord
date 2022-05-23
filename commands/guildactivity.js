@@ -22,21 +22,24 @@ module.exports = {
 
 		await fetch(url, settings)
 			.then(res => res.json())
-			.then(guildData => {
+			.then(async guildData => {
 				let msg = ""
-				for(let member in guildData.members){
+				for (let member in guildData.members) {
+
+					let state = ""
 
 					// query player information
+					await fetch(`https://api.wynncraft.com/v2/player/${guildData.members[member].name}/stats`, settings)
+						.then(res => res.json())
+						.then(playerData => {
+								state = (playerData.data[0].meta.location.online) ? `[${playerData.data[0].meta.location.server}] \u00bb Connected !` : playerData.data[0].meta.lastJoin.toString();
+								console.log(playerData.data[0].meta)
+							}
+						);
 
+					let temp = guildData.members[member].name + " | " + state + "\n"
 
-
-					let temp = guildData.members[member].name + " " + guildData.members[member].rank
-
-
-
-
-
-					if(msg.length + temp.length >= 2000) {
+					if (msg.length + temp.length >= 2000) {
 						messages.push(msg);
 						msg = "";
 					}
@@ -45,7 +48,6 @@ module.exports = {
 				messages.push(msg)
 			}
 		);
-		console.log(messages)
 		await interaction.reply({ content: messages[0], ephemeral: false });
 		if(messages.length > 1) for(let i = 1; i < messages.length; i++) await interaction.channel.send({ content: messages[i], ephemeral: false });
 	},
