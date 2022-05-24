@@ -19,3 +19,18 @@ The **config.json** file is structured like this :
 }
 ```
 
+To start the bot you'll need several things :
+
+* NodeJS v16+
+* Install dependencies such as :
+  * @discordjs/builders
+  * @discordjs/rest
+  * discord-api-types
+  * discord.js
+  * eslint
+  * node-fetch
+
+But you can install all the dependencies by using the following command into your terminal (when you're in the bot root directory) :
+```sh
+npm install @discordjs/builders @discordjs/rest discord-api-types discord.js eslint node-fetch
+```
