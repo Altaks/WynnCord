@@ -3,7 +3,8 @@ Wynncraft Discord Bot that uses WynnCraft public API
 
 ## Usages
 
-This bot got created for a friend that needed to check guild activies, how long since player last connected the server to analyse what players were inactive
+This bot got created for a friend that needed to check guild activities, how long since player last connected the server to analyse what players were inactive.
+
 Feel free to fork/use the code, you'll just need to add a **config.json** file with 3 things »
 
 * The bot's client ID (the id of your application)
@@ -13,8 +14,8 @@ Feel free to fork/use the code, you'll just need to add a **config.json** file w
 The **config.json** file is structured like this : 
 ```json
 {
-  "clientID" : "paste the ID of your application"
-  "guildID" : "paste the ID of your server here"
+  "clientID" : "paste the ID of your application",
+  "guildID" : "paste the ID of your server here",
   "token": "paste the token of connection to your bot here." 
 }
 ```
