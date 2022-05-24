@@ -14,8 +14,8 @@ Feel free to fork/use the code, you'll just need to add a **config.json** file w
 The **config.json** file is structured like this : 
 ```json
 {
-  "clientID" : "paste the ID of your application",
-  "guildID" : "paste the ID of your server here",
+  "clientId" : "paste the ID of your application",
+  "guildId" : "paste the ID of your server here",
   "token": "paste the token of connection to your bot here." 
 }
 ```
