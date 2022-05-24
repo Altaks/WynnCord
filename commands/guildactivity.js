@@ -18,47 +18,58 @@ module.exports = {
 		let url = `https://api.wynncraft.com/public_api.php?action=guildStats&command=${searchedGuild}`;
 		let settings = { method: "GET" };
 
-		// build response msg
-		let messages = [];
+		// fetch player offsets from last connection
+		let playerOffsetsInDays = [];
 
 		await fetch(url, settings)
 			.then(res => res.json())
 			.then(async guildData => {
-				let msg = ""
 				for (let member in guildData.members) {
-
-					let state = ""
-
 					// query player information
 					await fetch(`https://api.wynncraft.com/v2/player/${guildData.members[member].name}/stats`, settings)
 						.then(res => res.json())
 						.then(playerData => {
-								if(playerData.data.length != 0) {
-									state = (playerData.data[0].meta.location.online) ? `[${playerData.data[0].meta.location.server}] \u00bb Connected !` : convertDateOffset(playerData.data[0].meta.lastJoin);
-								} else {
-									state = "Unknown"
-								}
+								playerOffsetsInDays.push({
+									player: guildData.members[member].name,
+									offset: convertDateOffset(playerData.data[0].meta.lastJoin),
+								})
 							}
 						);
-
-					let temp = state.replace("T"," ").replace("Z","") + " | " + guildData.members[member].name + "\n"
-
-					if (msg.length + temp.length >= 2000) {
-						messages.push(msg);
-						msg = "";
-					}
-					msg += temp;
 				}
-				messages.push(msg)
 			}
 		);
+
+		// after getting all offsets, reverse sort the playeroffsets to get the least connected players first
+		playerOffsetsInDays = playerOffsetsInDays.sort((a,b) => a.offset - b.offset)
+		playerOffsetsInDays = playerOffsetsInDays.reverse()
+
+		// build bot response
+		let messages = [];
+		let msg = ""
+
+		for(let index in playerOffsetsInDays){
+			let temp = magnifyText(playerOffsetsInDays[0].offset.toString().length ,playerOffsetsInDays[index].offset, playerOffsetsInDays[index].player);
+
+			if (msg.length + temp.length >= 2000) {
+				messages.push(msg);
+				msg = "";
+			}
+			msg += temp;
+		}
+		messages.push(msg)
+
+		// send result
 		await interaction.editReply({ content: messages[0], ephemeral: false });
 		if(messages.length > 1) for(let i = 1; i < messages.length; i++) await interaction.channel.send({ content: messages[i], ephemeral: false });
 	},
 };
 
 function convertDateOffset(date) {
-	let offSet = Math.floor((new Date() - new Date(date).getTime()) / 1000)
-	let days = Math.floor(offSet / 86400)
-	return days.toString() + " days"
+	return Math.floor(Math.floor((new Date() - new Date(date).getTime()) / 1000) / 86400)
+}
+
+function magnifyText(firstOffsetLength, offset, pseudo){
+	let msg = "\`" + offset;
+	while(msg.length < firstOffsetLength) msg = " " + msg;
+	return msg + " days | " + pseudo + "\`\n"
 }
