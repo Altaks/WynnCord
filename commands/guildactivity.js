@@ -33,7 +33,6 @@ module.exports = {
 						.then(res => res.json())
 						.then(playerData => {
 								state = (playerData.data[0].meta.location.online) ? `[${playerData.data[0].meta.location.server}] \u00bb Connected !` : playerData.data[0].meta.lastJoin.toString();
-								console.log(playerData.data[0].meta)
 							}
 						);
 
