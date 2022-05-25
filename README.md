@@ -35,6 +35,12 @@ But you can install all the dependencies by using the following command into you
 ```sh
 npm install @discordjs/builders @discordjs/rest discord-api-types discord.js eslint node-fetch
 ```
+The first time you launch the bot, you'll need to execute this command first:
+```sh
+node deploy-commands.js
+```
+After you done this command one time, you wont need to re-use it
+
 And then to start the bot you'll only need to type :
 ```sh
 node index.js
