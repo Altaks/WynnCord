@@ -22,7 +22,7 @@ The **config.json** file is structured like this :
 
 To start the bot you'll need several things :
 
-* NodeJS v16+
+* [NodeJS v16+](https://nodejs.org/en/)
 * Install dependencies such as :
   * @discordjs/builders
   * @discordjs/rest
